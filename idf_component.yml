@@ -1,0 +1,3 @@
+dependencies:
+  ota:
+    git: https://github.com/wsarat/esp-component-ota.git

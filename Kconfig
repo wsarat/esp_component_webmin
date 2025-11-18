@@ -1,0 +1,21 @@
+menu "webmin Component Configuration"
+
+    config WEBMIN_HTTP_PORT
+        int "webmin server port"
+        default 8081
+        help
+            Port
+
+    config WEBMIN_BASIC_USERNAME
+        string "webmin basic auth username"
+        default "admin"
+        help
+            Username
+
+    config WEBMIN_BASIC_PASSWORD
+        string "webmin basic auth password"
+        default "password"
+        help 
+            Password
+
+endmenu
