@@ -64,7 +64,8 @@ static esp_err_t basic_auth_get_handler(httpd_req_t *req)
             //httpd_resp_set_type(req, "application/json");
             httpd_resp_set_hdr(req, "Connection", "keep-alive");
             //asprintf(&basic_auth_resp, "{\"authenticated\": true,\"user\": \"%s\"}", basic_auth_info->username);
-            httpd_resp_send(req, index_html_start, strlen(basic_auth_resp));
+            size_t content_length = index_html_end - index_html_start;
+            httpd_resp_send(req, (char*)index_html_start, content_length);
             free(basic_auth_resp);
         }
         free(auth_credentials);
