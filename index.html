@@ -1,1 +1,101 @@
-hello world!
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESP32 Web Management</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        .collapse {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container my-5">
+        <h1 class="text-center text-success">ESP32 Configuration</h1>
+        <form id="configForm" method="POST" action="/config">
+            <div class="form-group">
+                <label for="hostname">Host Name (mDNS):</label>
+                <input type="text" id="hostname" name="hostname" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="httpPort">HTTP Server Port:</label>
+                <input type="text" id="httpPort" name="httpPort" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="ssid">Wi-Fi SSID:</label>
+                <input type="text" id="ssid" name="ssid" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="passphrase">Wi-Fi Passphrase:</label>
+                <input type="password" id="passphrase" name="passphrase" class="form-control" required>
+            </div>
+            <input type="submit" value="Save Config" class="btn btn-success btn-block">
+        </form>
+        
+        <hr>
+        
+        <button class="btn btn-info btn-block" data-toggle="collapse" data-target="#advancedOptions">Advanced Options</button>
+        
+        <div id="advancedOptions" class="collapse">
+
+            <div class="form-group">
+                <label for="httpPort">Webmin Port:</label>
+                <input type="text" id="httpPort" name="httpPort" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="httpPort">Webmin Username:</label>
+                <input type="text" id="httpUser" name="httpPort" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="httpPort">Webmin Password:</label>
+                <input type="password" id="httpPasswd" name="httpPort" class="form-control" required>
+            </div>
+            <input type="submit" value="Save Config" class="btn btn-warning btn-block">
+
+            <div class="form-group">
+                <label for="firmwareUrl">Firmware Update URL:</label>
+                <input type="text" id="firmwareUrl" name="firmwareUrl" class="form-control" placeholder="Enter firmware URL">
+                <button class="btn btn-primary btn-block mt-2" onclick="submitFirmwareUpdate()">Update Firmware</button>
+            </div>
+
+            <button class="btn btn-danger btn-block" onclick="rebootESP()">Reboot ESP32</button>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script>
+        function rebootESP() {
+            fetch('/reboot', { method: 'POST' })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Rebooting ESP32...');
+                    }
+                });
+        }
+
+        function submitFirmwareUpdate() {
+            const url = document.getElementById('firmwareUrl').value;
+            if (url) {
+                fetch('/update-firmware', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ firmwareUrl: url })
+                }).then(response => {
+                    if (response.ok) {
+                        alert('Firmware update initiated...');
+                    }
+                });
+            } else {
+                alert('Please enter a firmware update URL.');
+            }
+        }
+    </script>
+</body>
+</html>
