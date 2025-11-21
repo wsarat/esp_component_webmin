@@ -8,6 +8,9 @@ static httpd_handle_t webmin_server = NULL;
 
 static const char *TAG = "webmin";
 
+extern const uint8_t index_html_start[] asm("_binary_index_html_start")
+extern const uint8_t index_html_end[] asm("_binary_index_html_end")
+
 #define HTTPD_401      "401 UNAUTHORIZED"           /*!< HTTP Response 401 */
 
 typedef struct {
@@ -58,10 +61,10 @@ static esp_err_t basic_auth_get_handler(httpd_req_t *req)
             ESP_LOGI(TAG, "Authenticated!");
             char *basic_auth_resp = NULL;
             httpd_resp_set_status(req, HTTPD_200);
-            httpd_resp_set_type(req, "application/json");
+            //httpd_resp_set_type(req, "application/json");
             httpd_resp_set_hdr(req, "Connection", "keep-alive");
-            asprintf(&basic_auth_resp, "{\"authenticated\": true,\"user\": \"%s\"}", basic_auth_info->username);
-            httpd_resp_send(req, basic_auth_resp, strlen(basic_auth_resp));
+            //asprintf(&basic_auth_resp, "{\"authenticated\": true,\"user\": \"%s\"}", basic_auth_info->username);
+            httpd_resp_send(req, index_html_start, strlen(basic_auth_resp));
             free(basic_auth_resp);
         }
         free(auth_credentials);
