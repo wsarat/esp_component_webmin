@@ -93,8 +93,8 @@ static httpd_handle_t start_webserver(void)
 {
     httpd_handle_t server = NULL;
     httpd_config_t config = HTTPD_DEFAULT_CONFIG();
-    config.server_port = (uint16_t)CONFIG_WEBMIN_HTTP_PORT;
-
+    config.server_port = (uint16_t)CONFIG_WEBMIN_HTTP_PORT; 
+    config.ctrl_port = (uint16_t)CONFIG_WEBMIN_HTTP_PORT;
     config.lru_purge_enable = true;
 
     // Start the httpd server
