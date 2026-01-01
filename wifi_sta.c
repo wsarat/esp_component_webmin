@@ -81,24 +81,24 @@ static void event_handler(void* arg, esp_event_base_t event_base,
 }
 
 esp_err_t wifi_connect(char *ssid, char *pass, u_int8_t auth_mode) {
-    // wifi_config_t wifi_config = {
-    //     .sta = {
-    //         .ssid = ssid,
-    //         .password = pass,
-    //         /* Authmode threshold resets to WPA2 as default if password matches WPA2 standards (password len => 8).
-    //          * If you want to connect the device to deprecated WEP/WPA networks, Please set the threshold value
-    //          * to WIFI_AUTH_WEP/WIFI_AUTH_WPA_PSK and set the password with length and format matching to
-    //          * WIFI_AUTH_WEP/WIFI_AUTH_WPA_PSK standards.
-    //          */
-    //         .threshold.authmode = auth_mode,
-    //         // .sae_pwe_h2e = ESP_WIFI_SAE_MODE,
-    //         // .sae_h2e_identifier = EXAMPLE_H2E_IDENTIFIER,
-    //     },
-    // };
-    wifi_config_t wifi_config;
+    wifi_config_t wifi_config = {
+        .sta = {
+            // .ssid = ssid,
+            // .password = pass,
+            /* Authmode threshold resets to WPA2 as default if password matches WPA2 standards (password len => 8).
+             * If you want to connect the device to deprecated WEP/WPA networks, Please set the threshold value
+             * to WIFI_AUTH_WEP/WIFI_AUTH_WPA_PSK and set the password with length and format matching to
+             * WIFI_AUTH_WEP/WIFI_AUTH_WPA_PSK standards.
+             */
+            .threshold.authmode = auth_mode,
+            .sae_pwe_h2e = WPA3_SAE_PWE_BOTH,
+            .sae_h2e_identifier = "",
+        },
+    };
+    // wifi_config_t wifi_config;
     strncpy((char *)&(wifi_config.sta.ssid), ssid, 32);
     strncpy((char *)&(wifi_config.sta.password), pass, 64);
-    wifi_config.sta.threshold.authmode = auth_mode;
+    // wifi_config.sta.threshold.authmode = auth_mode;
 
     ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA) );
     ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_STA, &wifi_config) );
